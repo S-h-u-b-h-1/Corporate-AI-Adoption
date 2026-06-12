@@ -1,0 +1,11 @@
+check,value
+raw_rows,200000
+raw_columns,13
+missing_values_total,0
+full_duplicate_rows,0
+unique_companies,8000
+unique_industries,10
+unique_countries,15
+min_year,2015
+max_year,2035
+negative_revenue_impact_rows,7440
