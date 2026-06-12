@@ -338,7 +338,7 @@ with tab_insights:
         st.markdown("""
         <div class="insight-card" style="border-left-color: #00f2fe; background: rgba(0, 242, 254, 0.05);">
             <h4 style="color: #00f2fe;">The Global Benchmark</h4>
-            This dataset encompasses over 21,000 corporate entities globally, tracking their journey through AI adoption. It measures maturity levels, financial investments, productivity gains, and total revenue impacts across different industries and regions.
+            This dataset encompasses <strong>200,000</strong> corporate entities globally, tracking their journey through AI adoption. It measures maturity levels, financial investments, productivity gains, and total revenue impacts across different industries and regions.
         </div>
         <div class="insight-card" style="border-left-color: #f093fb; background: rgba(240, 147, 251, 0.05);">
             <h4 style="color: #f093fb;">How to Use This Dashboard</h4>
