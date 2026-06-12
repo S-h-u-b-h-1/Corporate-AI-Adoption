@@ -244,13 +244,13 @@ def get_options(col):
     return sorted(df[col].dropna().unique().tolist())
 
 with filter_col1:
-    selected_industry = st.multiselect("Industry Sector", get_options('industry'), default=get_options('industry')[:4])
+    selected_industry = st.multiselect("Industry Sector", get_options('industry'))
 with filter_col2:
-    selected_region = st.multiselect("Geographic Region", get_options('region'), default=get_options('region'))
+    selected_region = st.multiselect("Geographic Region", get_options('region'))
 with filter_col3:
-    selected_maturity = st.multiselect("Maturity Stage", get_options('maturity_stage'), default=get_options('maturity_stage'))
+    selected_maturity = st.multiselect("Maturity Stage", get_options('maturity_stage'))
 with filter_col4:
-    selected_scale = st.multiselect("Scale Proxy", get_options('company_scale_proxy'), default=get_options('company_scale_proxy'))
+    selected_scale = st.multiselect("Scale Proxy", get_options('company_scale_proxy'))
 
 year_min, year_max = int(df['year'].min()), int(df['year'].max())
 selected_years = st.slider("Timeline Horizon", year_min, year_max, (year_min, year_max))
@@ -315,42 +315,59 @@ tab_insights, tab1, tab2, tab3, tab4, tab5 = st.tabs([
 ])
 
 with tab_insights:
-    col_l, col_r = st.columns([1, 1])
+    is_filtered = bool(selected_industry or selected_region or selected_maturity or selected_scale or (selected_years[0] > year_min or selected_years[1] < year_max))
     
-    with col_l:
-        st.markdown("### Executive Summary")
+    if not is_filtered:
+        st.markdown("### 📊 About the Corporate AI Adoption Dataset")
         st.markdown("""
-        <div class="insight-card">
-            <h4>1. Maturity Drives Value</h4>
-            AI maturity is strongly linked with adoption and value creation. Organizations in the 'Optimized' stage 
-            report significantly higher financial impact and productivity gains compared to those in 'Foundation' stages.
+        <div class="insight-card" style="border-left-color: #00f2fe; background: rgba(0, 242, 254, 0.05);">
+            <h4 style="color: #00f2fe;">The Global Benchmark</h4>
+            This dataset encompasses over 21,000 corporate entities globally, tracking their journey through AI adoption. It measures maturity levels, financial investments, productivity gains, and total revenue impacts across different industries and regions.
         </div>
-        <div class="insight-card">
-            <h4>2. Training is the Catalyst</h4>
-            Employee training appears central to scaling AI adoption. Higher AI training hours correlate strongly 
-            with elevated maturity scores and improved automation rates.
-        </div>
-        <div class="insight-card">
-            <h4>3. Scale Matters</h4>
-            Deployment scale is highly influential: broader deployment footprints show much higher adoption maturity. 
-            Companies scaling from isolated pilots to enterprise-wide integration experience exponential ROI growth.
+        <div class="insight-card" style="border-left-color: #f093fb; background: rgba(240, 147, 251, 0.05);">
+            <h4 style="color: #f093fb;">How to Use This Dashboard</h4>
+            The visualizations and KPIs on this dashboard are completely interactive. <strong>Use the Command Center Parameters above</strong> to filter by specific industries, regions, or maturity stages. As you apply filters, this insights page and all charts will automatically recalculate to reveal hidden trends and ROI metrics specific to your selection.
         </div>
         """, unsafe_allow_html=True)
-
-    with col_r:
-        st.markdown("### Dynamic Filtered Insights")
-        try:
-            insights = build_top_insights(filtered_df)
-            for i in range(3):
-                if i < len(insights):
-                    st.markdown(f"""
-                    <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); border-left: 4px solid #00f2fe; padding: 1.2rem; border-radius: 8px; color: #e2e8f0; margin-bottom: 1rem;">
-                        <strong style="color: #00f2fe;">Dynamic Observation {i+1}</strong><br>
-                        {insights[i]}
-                    </div>
-                    """, unsafe_allow_html=True)
-        except Exception as e:
-            st.info("Adjust filters to generate automated insights.")
+    else:
+        col_l, col_r = st.columns([1, 1])
+        
+        with col_l:
+            st.markdown("### Executive Summary")
+            st.markdown("""
+            <div class="insight-card">
+                <h4>1. Maturity Drives Value</h4>
+                AI maturity is strongly linked with adoption and value creation. Organizations in the 'Optimized' stage 
+                report significantly higher financial impact and productivity gains compared to those in 'Foundation' stages.
+            </div>
+            <div class="insight-card">
+                <h4>2. Training is the Catalyst</h4>
+                Employee training appears central to scaling AI adoption. Higher AI training hours correlate strongly 
+                with elevated maturity scores and improved automation rates.
+            </div>
+            <div class="insight-card">
+                <h4>3. Scale Matters</h4>
+                Deployment scale is highly influential: broader deployment footprints show much higher adoption maturity. 
+                Companies scaling from isolated pilots to enterprise-wide integration experience exponential ROI growth.
+            </div>
+            """, unsafe_allow_html=True)
+    
+        with col_r:
+            st.markdown("### Dynamic Filtered Insights")
+            try:
+                insights = build_top_insights(filtered_df)
+                if insights:
+                    for i in range(min(3, len(insights))):
+                        st.markdown(f"""
+                        <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); border-left: 4px solid #00f2fe; padding: 1.2rem; border-radius: 8px; color: #e2e8f0; margin-bottom: 1rem;">
+                            <strong style="color: #00f2fe;">Dynamic Observation {i+1}</strong><br>
+                            {insights[i]}
+                        </div>
+                        """, unsafe_allow_html=True)
+                else:
+                    st.info("Not enough data to generate insights for this specific filter slice.")
+            except Exception as e:
+                st.info("Adjust filters to generate automated insights.")
 
 with tab1:
     col1, col2 = st.columns([1.5, 1])
