@@ -74,24 +74,33 @@ st.markdown("""
 
     /* Built By Badge */
     .built-by {
-        text-align: center;
         font-family: 'Outfit', sans-serif;
         font-size: 0.85rem;
         font-weight: 700;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
         text-transform: uppercase;
-        color: #38bdf8;
-        margin-bottom: 2rem;
-        padding: 5px 20px;
+        color: #38bdf8 !important;
+        padding: 8px 20px;
         border: 1px solid rgba(56, 189, 248, 0.4);
         border-radius: 50px;
         display: inline-block;
-        background: rgba(56, 189, 248, 0.1);
-        box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        text-decoration: none !important;
+        transition: all 0.3s ease;
+    }
+    .built-by:hover {
+        background: rgba(56, 189, 248, 0.2);
+        box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        color: #fff !important;
+        transform: translateY(-2px);
     }
     .built-by-container {
-        text-align: center;
-        margin-top: -20px;
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        z-index: 9999;
     }
 
     /* Control Panel Box Styling */
@@ -232,7 +241,14 @@ if df.empty:
 # --- Header & Branding ---
 st.markdown('<div class="main-header">Corporate AI Adoption Matrix</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Executive Overview of AI Maturity, Operational Readiness & Financial Impact</div>', unsafe_allow_html=True)
-st.markdown('<div class="built-by-container"><div class="built-by">Built by Shubhaang Kataruka</div></div>', unsafe_allow_html=True)
+
+# Floating LinkedIn Badge
+st.markdown(
+    '<div class="built-by-container">'
+    '<a href="https://www.linkedin.com/in/shubhaangkataruka/" target="_blank" class="built-by">'
+    'Built by Shubhaang Kataruka</a></div>', 
+    unsafe_allow_html=True
+)
 
 # --- Top Level Control Panel ---
 st.markdown('<div class="control-panel">', unsafe_allow_html=True)
