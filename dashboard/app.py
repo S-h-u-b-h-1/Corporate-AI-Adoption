@@ -120,12 +120,16 @@ st.markdown("""
         -webkit-backdrop-filter: blur(16px);
         border: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: 16px;
-        padding: 1.5rem;
+        padding: 1.5rem 1rem;
         text-align: center;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         transition: transform 0.3s ease, border-color 0.3s ease;
         position: relative;
         overflow: hidden;
+        height: 130px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
     .metric-container:hover {
         transform: translateY(-5px);
@@ -140,18 +144,20 @@ st.markdown("""
     }
     .metric-title {
         color: #94a3b8;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin-bottom: 10px;
+        letter-spacing: 0.05em;
+        margin-bottom: 8px;
+        white-space: nowrap;
     }
     .metric-value {
         color: #f8fafc;
         font-family: 'Outfit', sans-serif;
-        font-size: 2.5rem;
+        font-size: 1.8rem;
         font-weight: 900;
         text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+        white-space: nowrap;
     }
 
     /* Strategic Insight Cards */
@@ -251,13 +257,18 @@ selected_years = st.slider("Timeline Horizon", year_min, year_max, (year_min, ye
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Apply filters
-filtered_df = df[
-    df['industry'].isin(selected_industry) &
-    df['region'].isin(selected_region) &
-    df['maturity_stage'].isin(selected_maturity) &
-    df['company_scale_proxy'].isin(selected_scale) &
-    df['year'].between(selected_years[0], selected_years[1])
-]
+filtered_df = df.copy()
+
+if selected_industry:
+    filtered_df = filtered_df[filtered_df['industry'].isin(selected_industry)]
+if selected_region:
+    filtered_df = filtered_df[filtered_df['region'].isin(selected_region)]
+if selected_maturity:
+    filtered_df = filtered_df[filtered_df['maturity_stage'].isin(selected_maturity)]
+if selected_scale:
+    filtered_df = filtered_df[filtered_df['company_scale_proxy'].isin(selected_scale)]
+
+filtered_df = filtered_df[filtered_df['year'].between(selected_years[0], selected_years[1])]
 
 if filtered_df.empty:
     st.warning("No data matches the selected filters. Please adjust your Command Center parameters.")
